@@ -27,8 +27,34 @@
               console.log (`${name}'s age is ${age}`)
     -- Desctructing
     -- Modules
-    
+        Modules in ES6 are files that allows code and data to be isolated, it helps in organizing the grouping of code logically
+        They are also called packages or libraries
+        export constant Name = 'Edwin'
+        
+        import Name from './someFile';
+=================================== TypeScript ================================================
+TypeScript is superset of JavaScript means a wrapper or layer with more features. We have file.ts its being compiled by complier 
+into JavaScript
 
+Features
+        - Types
+            let name: string; //example
+            let isDone: boolean;
+            let posts: number[] = [1,2,3];
+            let notsure: any ='Hi 78';
+            number, string[], boolean, string, any
+        - Interfaces
+            With interfaces we can define how our data or functionalities should be modeled
+            interface Post{
+                title: string;
+            }
+        - Decorators
+            Decorators are functionsl that are invoked with prefixed @Symbol for example @Component
+            They return the same things that was passed in but modify the data in some way
+            We can decorate, Classes, Methods, Properties and Parameters
+            
+ 
+Plus all the ES6 features like clases, arrows functions, modules, block scoped variables
 =================================== Info ================================================
 -- package.json - Basic information and list of dependencies that are required to run the project. This is done by CLI.
 -- TypeScript gets compiled into JavaScript
@@ -55,7 +81,16 @@
     
     Modules -> Components -> Selector/Template/CSS
     
-
+-- String Interpolation -> In the HTML (View) we show the data as {{ name }}  - This name is defined in the component
+-- Tertary operation -> {{city ? city:'No City'}}
+-- Property Binding
+                  Active <input type="radio" id="status" [checked]="status">
+                  using [] -> This is being binded with variable 'status' defined in component module
+-- Event Binding
+                <button (click)="greetPerson()">Click</button>
+                <div style="height: 200px; width: 200px;border: 1px solid" (mouseover)="greetPerson()"></div>
+            
+                  
 =================================== Commands ================================================
 -- https://github.com/angular/angular-cli
 npm install -g @angular/cli
