@@ -1,14 +1,30 @@
 
+=================================== Info ================================================
 -- package.json - Basic information and list of dependencies that are required to run the project. This is done by CLI.
 -- TypeScript gets compiled into JavaScript
+-- @ declarative -> LIke @Component is declartive
+-- main.ts - This is incharge of bootstraping whole application
+              In this AppModule is being imported and then passing it to bootstrapModule(AppModule)
 
 -- index.html -> This is the starting body
 <body>
     <app-root></app-root> // This app-root is defined app.component.ts (@Component -> selector:'app-root')
 </body>
 
+-- We write the code in the components (ts stands for TypeScript)
+    a) app.components.ts [THIS IS THE CLASS where we write elements, objects etc and it talks with HTML the view layer]
+    b) app.components.html [This is the view layer]
+    c) app.components.css [This is the CSS file]
+    d) app.module.ts - Module wraps everything and module is being bootstraped via (main.ts)
+                       All the components needs to be registed to this AppModule as its being bootstrapped
+                       (import it and then registed under @NgModule)
+                       Inside this we also tell which component is the bootstrap component like bootstrap:[AppComponent]
+    e) app.components.spec.ts [This is testing file]
+    
+    Modules -> Components -> Selector/Template/CSS
+    
 
-===== Commands ======
+=================================== Commands ================================================
 -- https://github.com/angular/angular-cli
 npm install -g @angular/cli
 ng new demo -----> (Creation of new project name called demo)
