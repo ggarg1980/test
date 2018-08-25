@@ -89,7 +89,9 @@ Plus all the ES6 features like clases, arrows functions, modules, block scoped v
 -- Event Binding
                 <button (click)="greetPerson()">Click</button>
                 <div style="height: 200px; width: 200px;border: 1px solid" (mouseover)="greetPerson()"></div>
-            
+         
+-- Two way binding: If you change something in the front-hand it changes in backhand and vice-versa
+                <input [(ngModel)]="lastName" type="text" id="lastName">            
                   
 =================================== Commands ================================================
 -- https://github.com/angular/angular-cli
