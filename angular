@@ -1,3 +1,33 @@
+=================================== ES6/ECMAScript 6 ================================================
+-- This is created to standardized JavaScript. This is the specification and javascript is the implemnation 
+    --Blocked scoped variables
+        - Old way to use -> 'var'
+        - New way -> 'let'
+        - New way -> 'const'
+    -- Class
+        class People
+        {
+            constructor()
+            {This is constructor}
+            listPerson()
+            {This is method}
+        }
+    -- Arrow functions
+       old way --> var name = function (){}
+       new way --> var name = ()=>{}
+    -- Templates
+       `Back Quote
+       Old way 
+              var name = 'Edwin'
+              var age = 30
+              console.log(name +'s age is ' + age);
+       New way
+              let name = 'Edwin'
+              let age = 30
+              console.log (`${name}'s age is ${age}`)
+    -- Desctructing
+    -- Modules
+    
 
 =================================== Info ================================================
 -- package.json - Basic information and list of dependencies that are required to run the project. This is done by CLI.
@@ -13,6 +43,8 @@
 
 -- We write the code in the components (ts stands for TypeScript)
     a) app.components.ts [THIS IS THE CLASS where we write elements, objects etc and it talks with HTML the view layer]
+                         - Constructutor are used to inject dependencies from other modules
+                         - ngOnInit - These are the methods lifeCycle 
     b) app.components.html [This is the view layer]
     c) app.components.css [This is the CSS file]
     d) app.module.ts - Module wraps everything and module is being bootstraped via (main.ts)
@@ -30,4 +62,4 @@ npm install -g @angular/cli
 ng new demo -----> (Creation of new project name called demo)
 ng serve ----> (Go inside the project and this command will server)
 ng build --> To build the application (DIST folder is created)
-
+ng g c example (creation of generate component named 'example')
