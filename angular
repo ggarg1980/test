@@ -1,0 +1,17 @@
+
+-- package.json - Basic information and list of dependencies that are required to run the project. This is done by CLI.
+-- TypeScript gets compiled into JavaScript
+
+-- index.html -> This is the starting body
+<body>
+    <app-root></app-root> // This app-root is defined app.component.ts (@Component -> selector:'app-root')
+</body>
+
+
+===== Commands ======
+-- https://github.com/angular/angular-cli
+npm install -g @angular/cli
+ng new demo -----> (Creation of new project name called demo)
+ng serve ----> (Go inside the project and this command will server)
+ng build --> To build the application (DIST folder is created)
+
