@@ -92,6 +92,65 @@ Plus all the ES6 features like clases, arrows functions, modules, block scoped v
          
 -- Two way binding: If you change something in the front-hand it changes in backhand and vice-versa
                 <input [(ngModel)]="lastName" type="text" id="lastName">            
+                
+-- Directives
+    a) *ngIf 
+        <div *ngIf="status; else NOTACTIVE"> Showing {{status}} </div>
+        <ng-template #NOTACTIVE>
+                  Showing NOT ACTIVE
+        </ng-template>
+    b)  *ngFor
+        <ul>
+                <li *ngFor="let post of posts; let i=index">{{i}} {{post.title}}</li>
+        </ul>
+    c) Styling directive
+       <div [ngStyle]="{color: status ? 'green' : 'red'}"> {{firstName}} </div>
+    d) Class directive
+        <div [ngClass]="{isActive: status}"> Last Name {{lastName}} </div>
+  ------------ Creating HTML forms start-----------------
+    <form>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" placeholder="Enter UserName" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="text" placeholder="Enter Password" class="form-control" id="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+    ------------ Creating HTML forms end-----------------
+    
+    <h2>{{hero.name | uppercase}} Details</h2>
+    The word uppercase in the interpolation binding, right after the pipe operator ( | ), activates the built-in UppercasePipe.
+    
+    
+    https://www.youtube.com/watch?v=khq0p10uBaI
+    
+Q: when rendering the page for the first time in angular, which file is called first?
+Ans: main.ts it has details around the module that is being bootstraped platformBrowserDynamic().bootstrapModule(AppModule)
+
+Q: What changes needs to be done in app.module.ts file if we create a component/directive manully?
+Ans: In the NgModule we import Modules and declare components
+
+Q: Different type of decorators
+Class Decorators: NgModule, Component, Directive
+Property Decorators: Input, Output
+Method Decorators: HostListener, HostBinding
+Parameter Decorators: Inject
+
+@: What are mandatory objects that must be defined in component decorator?
+Selector
+TemplateURL
+StyleURL
+
+@What are differnt type of component selectors?
+Element selector -> selector:'app-port'  -> <app-port></app-port>
+Class selector -> '.app-port' -> <div class="app-port"></div>
+Attribute selector -> '[app-port]' -> <div app-port></div>
+    
+
+    
                   
 =================================== Commands ================================================
 -- https://github.com/angular/angular-cli
@@ -100,3 +159,11 @@ ng new demo -----> (Creation of new project name called demo)
 ng serve ----> (Go inside the project and this command will server)
 ng build --> To build the application (DIST folder is created)
 ng g c example (creation of generate component named 'example')
+npm install bootstrap (installing bootstrap)
+    ---> Configuring it into angular.json --> 
+        "styles": [
+            "src/styles.css",
+             "node_modules/bootstrap/dist/css/bootstrap.css"
+             ]
+
+
