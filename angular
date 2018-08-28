@@ -144,14 +144,26 @@ Selector
 TemplateURL
 StyleURL
 
-@What are differnt type of component selectors?
+@ What are differnt type of component selectors?
 Element selector -> selector:'app-port'  -> <app-port></app-port>
 Class selector -> '.app-port' -> <div class="app-port"></div>
 Attribute selector -> '[app-port]' -> <div app-port></div>
     
+Q what is data binding?
+Its communcation between component file and the view html file.
 
-    
-                  
+Q Differnt types of data binding?
+-> String Interpolation using {{}}
+-> Property binding <input type="radio" id="status" [checked]="status">
+-> Event binding <button (click)="greetPerson()">Click</button>
+-> Two way data binding using ngModel <input [(ngModel)]="lastName" type="text" id="lastName">
+
+@ What are differnt directives available in Angular
+-> Structural directives (ngIf & ngFor) 
+-> Attibute directives (ngStyle & ngClass)
+
+https://www.greycampus.com/blog/programming/top-30-interview-questions-and-answers-on-angular-5
+
 =================================== Commands ================================================
 -- https://github.com/angular/angular-cli
 npm install -g @angular/cli
