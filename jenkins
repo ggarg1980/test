@@ -36,12 +36,10 @@ node
     }
    stage ('Push Docker Image')
    {
-     withCredentials([string(credentialsId: 'jenkins', variable: 'dockerHubPassword')]) 
-     {
-       sh "docker login -u ggarg -p ${dockerHubPassword}"
-     }
+        withCredentials([string(credentialsId: 'DockerHubPasswordv1', variable: 'dockerHubPasswordv1')]) {
+            sh "docker login -u ggarg -p ${dockerHubPasswordv1}"
+        }       
      sh 'docker push ggarg/my-app:2.0.0'
    }    
 }
-
 
