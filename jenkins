@@ -1,1 +1,47 @@
+https://www.youtube.com/watch?v=gdbA3vR2eDs
+https://github.com/javahometech/my-app
+http://ec2-52-66-189-195.ap-south-1.compute.amazonaws.com:8080/job/test-app-1/2/console
+
+==========================================================================
+Sample Step:- tool: Use a tool from predefined Tool installation 
+         Tool Type: Maven
+         Tool     : 'MavenPlugin 3.5.4'
+ Click on "Generate Pipeline script" => tool name: 'MavenPlugin3.5.4', type: 'maven'
+ This gives the path of the Maven where its installed
+==========================================================================
+
+Sample Step:- tool: Use a tool from predefined Tool installation 
+         Tool Type: Maven
+         Tool     : 'MavenPlugin 3.5.4'
+ Click on "Generate Pipeline script" => tool name: 'MavenPlugin3.5.4', type: 'maven'
+ This gives the path of the Maven where its installed
+==========================================================================
+
+
+node
+{
+    stage('SCM CheckOut')
+    {
+        git 'https://github.com/javahometech/my-app'
+    }
+    stage('MVN Package')
+    {
+	    def mvnHome = tool name: 'MavenPlugin3.5.4', type: 'maven'
+      def mvnCMD ="${mvnHome}/bin/mvn"
+      sh "${mvnCMD} clean package" 
+    }
+    stage ('Build Docker Image')
+    {
+      sh 'docker build -t ggarg/my-app:2.0.0 .'
+    }
+   stage ('Push Docker Image')
+   {
+     withCredentials([string(credentialsId: 'jenkins', variable: 'dockerHubPassword')]) 
+     {
+       sh "docker login -u ggarg -p ${dockerHubPassword}"
+     }
+     sh 'docker push ggarg/my-app:2.0.0'
+   }    
+}
+
 
