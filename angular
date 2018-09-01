@@ -162,11 +162,102 @@ Q Differnt types of data binding?
 -> Structural directives (ngIf & ngFor) 
 -> Attibute directives (ngStyle & ngClass)
 
+@Data passing between components 
+-> <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+-> @Input() hero: Hero;
+It's a one way data binding from the selectedHero property of the HeroesComponent
+to the hero property of the target element, which maps to the hero property of the HeroDetailComponent.
+
+@Service
+Components shouldn't fetch or save data directly and they certainly shouldn't knowingly present fake data. 
+They should focus on presenting data and delegate data access to a service
+In this tutorial, you'll create a HeroService that all application classes can use to get heroes.
+Instead of creating that service with new, you'll rely on Angular dependency injection to inject it into 
+the HeroesComponent constructor.@Injectable() services
+Notice that the new service imports the Angular Injectable symbol and annotates the class with the @Injectable() decorator.
+This marks the class as one that participates in the dependency injection system. 
+The HeroService class is going to provide an injectable service, and it can also have its own injected dependencies. 
+It doesn't have any dependencies yet, but it will soon
+Services are a great way to share information among classes that don't know each other
+
+@Constructor & ngOnInit
+Reserve the constructor for simple initialization such as wiring constructor parameters to properties. 
+The constructor shouldn't do anything. 
+It certainly shouldn't call a function that makes HTTP requests to a remote server as a real data service would.
+
+@Observable data
+Observable is one of the key classes in the RxJS library.
+HeroService.getHeroes() must have an asynchronous signature of some kind.
+It can take a callback. It could return a Promise. It could return an Observable.
+In this tutorial, HeroService.getHeroes() will return an Observable in part because it will 
+eventually use the Angular HttpClient.get method to fetch the heroes and HttpClient.get() returns an Observable
+//Actual method defination 
+import { Observable, of } from 'rxjs';
+getHeroes(): Observable<Hero[]> {
+  return of(HEROES);
+}
+//Caller 
+getHeroes(): void {
+  this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
+}
+The new version waits for the Observable to emit the array of heroes— which could happen now or several minutes from now. 
+Then subscribe passes the emitted array to the callback, which sets the component's heroes property.
+
+@AppRoutingModule
+An Angular best practice is to load and configure the router in a separate, top-level module that is dedicated to routing
+and imported by the root AppModule.
+Add routes
+Routes tell the router which view to display when a user clicks a link or pastes a URL into the browser address bar.
+A typical Angular Route has two properties:
+path: a string that matches the URL in the browser address bar.
+component: the component that the router should create when navigating to this route.
+You intend to navigate to the HeroesComponent when the URL is something like localhost:4200/heroes.
+Import the HeroesComponent so you can reference it in a Route. Then define an array of routes with a single route to that component.
+        const routes: Routes = [
+          { path: 'heroes', component: HeroesComponent }
+        ];
+        @NgModule({
+          imports: [ RouterModule.forRoot(routes) ],
+          exports: [ RouterModule ]
+        })
+        export class AppRoutingModule {}
+
+<h1>{{title}}</h1>
+<nav>
+  <a routerLink="/heroes">Heroes</a>
+</nav>
+<router-outlet></router-outlet>
+<app-messages></app-messages>
+
+A routerLink attribute is set to "/heroes", the string that the router matches to the route to HeroesComponent. 
+The routerLink is the selector for the RouterLink directive that turns user clicks into router navigations. 
+It's another of the public directives in the RouterModule.
+
+You removed <app-heroes> because you will only display the HeroesComponent when the user navigates to it.
+The <router-outlet> tells the router where to display routed views.
+
+
+
+
 https://www.greycampus.com/blog/programming/top-30-interview-questions-and-answers-on-angular-5
 
 =================================== Commands ================================================
 -- https://github.com/angular/angular-cli
 npm install -g @angular/cli
+ng new angular-tour-of-heroes
+cd angular-tour-of-heroes
+ng serve --open  [The --open flag opens a browser to http://localhost:4200/]
+ng generate component heroes
+ng generate component hero-detail
+ng generate service hero
+ng generate component messages
+ng generate module app-routing --flat --module=app
+
+--flat puts the file in src/app instead of its own folder.
+--module=app tells the CLI to register it in the imports array of the AppModule
+
+
 ng new demo -----> (Creation of new project name called demo)
 ng serve ----> (Go inside the project and this command will server)
 ng build --> To build the application (DIST folder is created)
