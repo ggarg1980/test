@@ -1,0 +1,69 @@
+Spring boot Application -> There are lot of defaults set in the project. In the Spring debug logs you have AUTO CONFIGURATION REPORT 
+which states are the defaults which are configured as part of the project. So dispatcher servlet and error configuration are automatically
+set. There is something called 'Jackson' beans doing conversion from JSON to objects and similar stuff.
+
+@SpringBootApplication
+@RestController
+@GetMapping
+@PathVariable
+@PostMapping
+@RequestBody
+@ResponseStatus(HttpStatus.NOT_FOUND)
+
+@SpringBootApplication   <---------------------------------------------- Required to define its spring boot application 
+public class CurrencyExchangeServiceApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(CurrencyExchangeServiceApplication.class, args);
+	}
+}
+
+@RestController <---------------------------------------------- Tell this is rest controller
+public class CurrencyExchangeController
+{
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	@Autowired <----------------------------------------------
+	private Environment env;
+	
+	@Autowired <----------------------------------------------
+	private ExchangeValueRepository repository;
+	
+	@GetMapping("/currency-exchange/from/{from}/to/{to}") <----------------------------------------------
+	public ExchangeValue retrieveExchangeValue(@PathVariable String from, @PathVariable String to) <-------
+	{
+		ExchangeValue eV = repository.findByFromAndTo(from, to);
+		eV.setPort(Integer.parseInt(env.getProperty("local.server.port")));
+		logger.info("{}", eV);
+		return eV;
+	}
+  @PostMapping("/users") <----------------------------------------------
+  public void createUser(@RequestBody User user) <----------------------------------------------
+  {
+     User inputUser = Service.save(user);
+  }
+  
+@PostMapping("/users") <-------------------------------------
+public ResponseEntity<Object> createUser(@RequestBody User user) <------ All the data is coming in the User Object
+{
+     User inputUser = Service.save(user);
+     //CREATED
+     //user/{id}  savedUser.getId()
+     URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}") <----------- To retrun URI of the created object
+				.buildAndExpand(saveUser.getId()).toUri();
+     retun ResponseEntity.created(location).build(); <---- URL is requried in HEADER and RESPONSE IS 201
+}
+  
+}
+
+//EXCEPTION HANDING - returning appropriate statuses via HTTP
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends RuntimeException {
+	public UserNotFoundException (String message)
+	{
+		super(message);
+	}
+}
+
+
+
+
