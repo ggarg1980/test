@@ -150,9 +150,17 @@ public method2(){}
 public method1() {}
 URL -> http://..../person/param (NOW PARAMETER NEEDS TO BE SET INTO HEADER)
 
-
 ================================= BASIC SECURITY ===============================================
+Maven Dependency -> spring-boot-starter-security ->
+Basic Auth - Password is printed in the logs and the client needs to set the security parameters as 
+Username - Usernamme
+Passowrd - Password
+These can be configured in the server in the application.properties
+security.user.name = username
+security.user.password = password
 
+================================= Basic JPA  ===============================================
+spring-boot-starter-data-jpa
 
 
 
