@@ -236,8 +236,23 @@ It's another of the public directives in the RouterModule.
 
 You removed <app-heroes> because you will only display the HeroesComponent when the user navigates to it.
 The <router-outlet> tells the router where to display routed views.
+constructor(
+    private route: ActivatedRoute,
+    private heroService: HeroService,
+    private location: Location
+  ) {}
+  
+The ActivatedRoute holds information about the route to this instance of the HeroDetailComponent. 
+This component is interested in the route's bag of parameters extracted from the URL. 
+The "id" parameter is the id of the hero to display.
 
+The HeroService gets hero data from the remote server and this component will use it to get the hero-to-display.
 
+The location is an Angular service for interacting with the browser. 
+You'll use it later to navigate back to the view that navigated here
+
+@HttpClient
+HttpClient is Angular's mechanism for communicating with a remote server over HTTP.
 
 
 https://www.greycampus.com/blog/programming/top-30-interview-questions-and-answers-on-angular-5
