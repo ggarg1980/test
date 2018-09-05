@@ -25,6 +25,7 @@ spring-cloud-starter-netflix-zuul ---> API Gateway
 spring-cloud-starter-netflix-eureka-client  <----> spring-cloud-starter-netflix-eureka-server -> Naming server --> Service Registration and Discovery
 spring-cloud-starter-openfeign --> Easy implmenation of Rest Clients
 spring-cloud-starter-netflix-ribbon -> Load balances 
+spring-cloud-starter-netflix-hysterix -> Fault tolerance 
 
 spring-cloud-starter-sleuth --> Unique Ids across request
 spring-cloud-sleuth-zipkin  --> Distributed tracing services with Zipkin
@@ -376,8 +377,45 @@ Implementation Zuul Filtering
 		}
 
 		}
-======================================================================================================================
+====================================================DISTRIBUTED TRACING==========================================================
+Sleuth, Zipkin, Rabbit MQ
+1. spring-cloud-starter-sleuth &  
+	spring-cloud-sleuth-zipkin &  
+			spring-cloud-starter-bus-amqp
+2. Add @Bean for Sampling for example 
 
+//Client side configuration
+	========================================
+	package a.b.c.d;
 
+	@SpringBootApplication
+	@EnableDiscoveryClient
+	public class SpringBoot 
+	{
+		@Bean
+		public Sampler defaultSampler()
+		{
+			return Sampler.ALWAYS_SAMPLER;		
+		}
+	}
 
+Zipkin - download the JAR and run the server (
+1. SET RABBIT_URI=ampq://localhost (This tells the zipkin server where to connect from Rabbit MQ)
+2. java -jar zipkin-server-2.5.2-exec.jar
+
+==============HYTRIX - FAULT TOLERANE================================================
+
+@EnableHytrix (Same level of @SprintBootApplication) - in the main applciation 
+
+@GetMapping("/fault-tolerance-example")
+@HystrixCommad(fallbackMethod="fallbackRetrieveConfiguration")
+public LimitConfiguration retrieveConfiguration()
+{
+   // some exception
+}
+
+public LimitConfiguration fallbackRetrieveConfiguration()
+{
+   return new LimitConfiguration();
+}
 
