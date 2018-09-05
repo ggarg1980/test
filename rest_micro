@@ -34,6 +34,8 @@ spring-cloud-starter-config <---->spring-cloud-config-server --> Configuration m
 spring-boot-starter-test
 spring-boot-starter-web
 spring-boot-starter-actuator
+spring-boot-starter-actuator
+spring-data-rest-hal-browser
 spring-boot-starter-data-jpa
 spring-boot-devtools
 
@@ -195,15 +197,80 @@ Challanges
 2. Debugging problems
 3. Fault tolrance should be handled correclty 
 
+=========================JPA===========================
+spring-boot-starter-data-jpa
 
+findAll()
+findById(id)
+deleteById(id)
+save(user)
 
+public interface ExchangeValueREpository extends JpaRepository<ExchangeValue, Long>
+{
+    ExchangeValue findByFromAndTo(String from, String to);
+    ExchangeValue findByFrom(String from);
 
+}
 	
+Currently Exchange Service 
+localhost:8000/currency-exchange/from/USD/to/INR
+localhost:8001/currency-exchange/from/USD/to/INR
+
+Currently Covertner service 
+localhost:8100/currency-coverter/from/{from}/to/{to}/quantity/{quantity}
 
 
+localhost:8100/currency-coverter/from/{from}/to/{to}/quantity/{quantity}
 
+======= Calling RestTemplate to call another service ========
 
+// from and to are coming as method arguments
 
+public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVariable String to, 
+									 @PathVariable BigDecimal quantity)
+{
+	Map<String, String> uriVariables = new HashMap<>();
+	uriVariables.put("from", from);
+	uriVariables.put("to", to);
+
+	ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().
+						getForEntity("http://localhost:8000/currency-exchnage/from/{from}/to/{to}",
+						CurrencyConversionBean.class, uriVariables);
+	CurrencyConversionBean respone = responseEntity.getBody();
+}
+
+======= Feign ========
+1. Include the deplendecy in the maven project -> spring-cloud-starter-openfeign
+2. @EnableFeignClients(""a.b.c.d"")  // THis is at the appplication level, same as that of 
+3. Step 3 create an interface which will call the service (proxy)
+
+	========================================
+	package a.b.c.d;
+
+	@SpringBootApplication
+	@EnableFeignClients("a.b.c.d") //Scan the packages 
+	public class SpringBoot 
+	{
+
+	}
+	========================================
+
+	@FeignClient(name="currency-exchange-service", url="localhost:8000")
+	public interface CurrencyExchangeServiceProxy 
+	{
+
+	@GetMapping("/currency-exchange/from/{from}/to/{to}")
+	public CurrencyConversionBean retrieveExchangeValues(@PathVariable String from, @PathVariable String to};
+
+	}
+	========================================
+	@Autowired
+	CurrencyExchangeServiceProxy proxy;
+	public CurrencyConversionBean convertCurrencyFeign(@PathVariable String from, @PathVariable String to, 
+										 @PathVariable BigDecimal quantity)
+	{
+		CurrencyConversionBean respone = proxy.retrieveExchangeValues(from, to);
+	}
 
 
 
