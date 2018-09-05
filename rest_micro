@@ -164,6 +164,42 @@ spring-boot-starter-data-jpa
 
 
 
+=======================Richardson Maturity Model=======================
+Level - 0 -> Expose webservices in REST Style
+	http://server/getPosts
+	http://server/deletePosts
+	http://server/doThis
+Level - 1 -> Expose resouces with proper URI (improper use of HTTP Methods)
+	http://server/accounts
+	http://server/accounts/10
+Level - 2 -> LEVEL 1 + Proper use of HTTP Methods
+	GET - http://server/accounts
+	DELETE - http://server/accounts/10
+Level - 3 -> LEVEL 2 + HATEOAS (What are next possible sections)
+
+================================Micro-services================================
+Small Autonomous services which are created to resolve the business domain problem (often have HTTP as the underlying protocol).
+-REST
+-Small well chosen Deployable Units
+-Cloud Enabled
+
+Benefits:- FMG II
+1. Fault Isolation
+2. Mixed Technology Stack
+3. Grangular Scalability 
+4. Independent development
+5. Independent deployment
+
+Challanges
+1. Complex Archiecture 
+2. Debugging problems
+3. Fault tolrance should be handled correclty 
+
+
+
+
+	
+
 
 
 
