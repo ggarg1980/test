@@ -239,7 +239,7 @@ public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVa
 	CurrencyConversionBean respone = responseEntity.getBody();
 }
 
-======= Feign ========
+======= Feign ======== Feign is the rest service client, easy to call resful webservices 
 1. Include the deplendecy in the maven project -> spring-cloud-starter-openfeign
 2. @EnableFeignClients(""a.b.c.d"")  // THis is at the appplication level, same as that of 
 3. Step 3 create an interface which will call the service (proxy)
@@ -253,6 +253,8 @@ public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVa
 	{
 
 	}
+	
+	
 	========================================
 
 	@FeignClient(name="currency-exchange-service", url="localhost:8000")
@@ -260,7 +262,7 @@ public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVa
 	{
 
 	@GetMapping("/currency-exchange/from/{from}/to/{to}")
-	public CurrencyConversionBean retrieveExchangeValues(@PathVariable String from, @PathVariable String to};
+	public CurrencyConversionBean retrieveExchangeValues(@PathVariable("from") String from, @PathVariable("to") String to};
 
 	}
 	========================================
@@ -271,6 +273,110 @@ public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVa
 	{
 		CurrencyConversionBean respone = proxy.retrieveExchangeValues(from, to);
 	}
+
+======= Ribbon ======== Ribbon is client side loadbalancer
+1. Include the dependecny -> spring-cloud-starter-netflix-ribbon -> Load balances
+2. Enable Ribbon Client
+3. Specify the URL in the application.properties -> <<Name_of_service>>.ribbon.listOfServers
+for example currency-exchange-service.ribbon.listOfservers=http://localhost:8000, http://localhost:8001
+	========================================
+
+	//@FeignClient(name="currency-exchange-service", url="localhost:8000")
+	@FeignClient(name="currency-exchange-service") -> name parameter is not used 
+	@RibbonClient(name="currency-exchange-service") -> name parameter is used to pick the properties from application.properties
+	                                                -> So we have http://localhost:8000/GetMapping (As below)
+							-> we have http://localhost:8000/currency-exchange/from/{from}/to/{to}
+	public interface CurrencyExchangeServiceProxy 
+	{
+
+	@GetMapping("/currency-exchange/from/{from}/to/{to}")
+	public CurrencyConversionBean retrieveExchangeValues(@PathVariable("from") String from, @PathVariable("to") String to};
+
+	}
+	========================================
+
+======= Eureka Naming Service ======== 
+-> When ever a service is coming up, it will register itself with the name server (Service Registration)
+-> When a micro-service wants to talk with another service it will talk with naming service (Service Discovery)
+spring-cloud-starter-netflix-eureka-client  <----> spring-cloud-starter-netflix-eureka-server 
+-> Naming server --> Service Registration and Discovery
+1. Include the dependecy from Spring Boot website - Eureka Server
+2. Then enable @EnableEurekaServer
+//Server side configuration
+	========================================
+	package a.b.c.d;
+
+	@SpringBootApplication
+	@EnableEurekaServer
+	public class SpringBoot 
+	{
+
+	}
+//Client side configuration
+	========================================
+	package a.b.c.d;
+
+	@SpringBootApplication
+	@EnableFeignClients("a.b.c.d") //Scan the packages 
+	@EnableDiscoveryClient
+	public class SpringBoot 
+	{
+
+	}
+	Application properites:-
+	eureka.client.service-url.default-zone=http://localhost:8761/eureka
+
+=========================== API Gateway (Zuul) ======================
+Features
+	Authetication, authorization & security
+	Rate Limits
+	Fault Tolernace
+	Service Aggregation
+1. Dependecny is Zuul and Eureka Discovery to talk with Naming server
+
+
+//Server side configuration
+	========================================
+	package a.b.c.d;
+
+	@SpringBootApplication
+	@EnableZuulProxy
+	@EnableDiscoveryClient 
+	public class SpringBoot 
+	{
+
+	}
+
+Implementation Zuul Filtering
+		@Component
+		public class ZuulLoggingFilter extends ZuulFilter
+		{
+
+		public int filterOrder() //In case if you have multiple filters
+		// it tells which should be executed first  and which shoudl be executed last
+		{
+			return 1;
+		}
+
+		public boolean shouldFilter()
+		{ //based on some business logic you can tell whether this filter should execute or not
+		 return true;
+		}
+
+		public String filterType()
+		{
+		  return "pre"; (valid pre/post/error before the request or after the request or only filter error request)
+		}
+
+		public Object run()
+		{
+		HttpServletRequest request = RequestContext.getCurrentContext().getRequest();
+		logger.info(" requst", request, request.getRequestURI());
+		return null
+		}
+
+		}
+======================================================================================================================
 
 
 
