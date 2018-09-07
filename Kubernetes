@@ -21,6 +21,42 @@ go to path -> \home\<user>\.aws
     aws_access_key_id = XXXXXXXXXXXXXXX
     aws_secret_access_key = XXXXXXXXXXXXXXXXXX
     
+3. aws iam get-user (try this command)
+4. How to install kubectl binary to Linux like OS & Copy and paste this code to your command line:
+
+KUBECTL_BIN=kubectl
+function install_kubectl {
+    if [ -z $(which $KUBECTL_BIN) ]
+       then
+           curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/$KUBECTL_BIN
+           chmod +x ${KUBECTL_BIN}
+           sudo mv ${KUBECTL_BIN} /usr/local/bin/${KUBECTL_BIN}
+    else
+       echo "Kubectl is most likely installed"
+    fi
+ 
+}
+
+Step 5:-
+Run this command:
+install_kubectl 
+
+Step 6: Intall kpis on linxs
+function install_kops {
+    if [ -z $(which kops) ]
+       then
+           curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+           chmod +x kops-linux-amd64
+           mv kops-linux-amd64 /usr/local/bin/kops
+       else
+           echo "kops is most likely installed"
+       fi
+}
+ 
+install_kops
+
+
+
 Step 3: Installing kubectl binanry -> refer net for the same
 Step 4: Installing kops binary -> refer net
 Step 5: Installing tereform
