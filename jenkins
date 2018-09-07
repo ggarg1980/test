@@ -1,22 +1,39 @@
 https://www.youtube.com/watch?v=gdbA3vR2eDs
+
+Installing Jenkins
+==================================================================
+============================================================================================
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+sudo yum install java-1.8.0 -y
+sudo yum remove java-1.7.0-openjdk -y
+sudo yum install jenkins -y
+sudo service jenkins start
+sudo chkconfig jenkins on
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo yum install docker -y
+sudo service docker start
+sudo chkconfig docker on
+sudo usermod -a -G docker ec2-user
+sudo usermod -a -G docker jenkins
+sudo yum install java-devel  -Y 
+sudo -u jenkins docker run hello-world
+sudo yum install git -y
+============================================================================================   
+Manage Jenkins/Global Tool Congifuration/Maven -> Add Maven ->
+PipeLine Syntax:
+				1. Sample Step:- 
+						tool: Use a tool from predefined Tool Installation
+						Tool Type: Maven
+						Tool: maven-3.5.4
+						Generate Pipeline script
+============================================================================================   
+-> Now to the EC2 Console and for the EC2 modify the security group and add 8080 in the incoming requests
+
+
 https://github.com/javahometech/my-app
 http://ec2-52-66-189-195.ap-south-1.compute.amazonaws.com:8080/job/test-app-1/2/console
-
-==========================================================================
-Sample Step:- tool: Use a tool from predefined Tool installation 
-         Tool Type: Maven
-         Tool     : 'MavenPlugin 3.5.4'
- Click on "Generate Pipeline script" => tool name: 'MavenPlugin3.5.4', type: 'maven'
- This gives the path of the Maven where its installed
-==========================================================================
-
-Sample Step:- tool: Use a tool from predefined Tool installation 
-         Tool Type: Maven
-         Tool     : 'MavenPlugin 3.5.4'
- Click on "Generate Pipeline script" => tool name: 'MavenPlugin3.5.4', type: 'maven'
- This gives the path of the Maven where its installed
-==========================================================================
-
+============================================================================================   
 
 node
 {
