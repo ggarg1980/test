@@ -41,5 +41,12 @@ node
         }       
      sh 'docker push ggarg/my-app:2.0.0'
    }    
+   stage('Run Container on Dev Server')
+   {
+       def dockerRun = 'sudo docker run -p 8080:8080 -d --name my-app ggarg/my-app:2.0.0'
+       sshagent(['ec2-user-deployment'])
+       {
+         sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.27.176 ${dockerRun}"
+       }
+   }
 }
-
