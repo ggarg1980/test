@@ -1,0 +1,28 @@
+'''
+Map requests by
+- URI patterns
+- Request parametes and parameter conditions
+- Request headers
+- Media Types
+
+Sample-0 - @GetMapping(path="quoteRequests", params="eventType") -> Only eventType attribute is present
+Sample-1 @GetMapping(path="quoteRequests", params="!eventType") -> Negative eventType shouldnt be present
+Sample-2 @GetMapping(path="quoteRequests", params="eventType=weddings") -> eventType with weddings value
+public String listRequests()
+{
+   return "quoteRequestList";
+}
+
+Method input signatures
+- Empty (no args)
+- @PathVariable
+- @RequestParam
+- @ModelAttributes
+- 25+ total Spring provided input signatures
+
+
+
+
+
+
+'''
