@@ -20,8 +20,46 @@ Method input signatures
 - @ModelAttributes
 - 25+ total Spring provided input signatures
 
+//Below object returns Model and View object 
+@GetMapping("/quoteRequest/{quoteId}")
+public ModelAndView viewQuoteRequest(@PathVariable int quoteId)
+{
+   QuoteRequest quoteRequestBean = new QuoteRequst();
+   quoteRequestBean.setBudget(5000);
+   qoteRequestBean.setEventType("wedding");
+   
+   ModelAndView mav = new ModelAndView();
+   mav.addObject("quoteRequestBean",quoteRequestBean);
+   mav.setViewName("quoteRequestDetail");
+   return mav;
+}
 
+//Example of a redirect between controllers
+@GetMapping("/quoteRequest/social/{id}")
+public String viewRequsetSocial(@PathVariable int id)
+{
+   String returnViewName ="quoteRequestSocialEventDetail";   
+   boolean somecondition = true;
+   if(somecondition)
+   {
+       returnViewName = "redirect:/quoteRequest/wedding/{id}"
+   }
+   
+   return returnViewName;
+   
+}
 
+//This is API response no GUI back
+@GetMapping
+@ResponseBody -> Spring will take care of sending JSON object
+public QuoteRequest viewQuoteRequestApi()
+{
+   QuoteRequest quoteRequestBean = new QuoteRequst();
+   quoteRequestBean.setBudget(5000);
+   qoteRequestBean.setEventType("LWD");
+   
+  return quoteRequestBean;
+}
 
 
 
