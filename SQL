@@ -101,10 +101,47 @@ ON tblEmployee.departmentid = tblDepartment.id
 WHERE tblEmployee.departmentid IS NULL     ////// or -> WHERE tblDepartment.id IS NULL  
 
 Simarlarly the other queries can be written in same way
- ######################################SELF JOINS##############################################
+ ######################################CTE (Common table Expressoin) ##############################################
+ WITH EmployeeCount(DepartmentId, TotalEmployees) AS
+ (
+       SELECT DepartmentId, count(*) as TotalEmployees from tblEmployee group by DepartmentId
+ )
+ SELECT DeptName, TotalEmployees From tbhDeparment 
+ INNER JOIN EmployeeCount
+ ON tbhDepartment.id = EmployeeCount.DepartmentId
+ order by TotalEmployees
+ 
+ ALSO multiple CTEs are possible with one "WITH CLAUSE"
+ for example
+ WITH CTE1() AS
+ (
+ ), CTE2() AS
+ ()
+ SELECT* XXXXXXXXXX
+ 
+ =========================RECURSIVE CTES======================================
+ Sample query on the employees table:
+SELECT employee_id, last_name, manager_id, LEVEL
+   FROM employees
+   CONNECT BY PRIOR employee_id = manager_id;
+ 
 
 
 
+1. Find Nth highest salary in SQL
+//OPTION#1
+SELECT TOP 1 salary FROM                                     //PICK TOP ROW
+(SELECT DISTINCT TOP 2 salary FROM employee ORDER BY DESC)  //GET Nth top rows
+results ORDER BY salary                                     //SORT THEM
+
+//OPTION#2
+WITH results AS
+(
+    SELECT salary, DENSE_RANK over (order by salary desc) as denserank
+)
+SELECT TOP 1 salary FROM results WHERE results.denserank = 2
+
+2. SQL query to get organziation hierarcy
 
 
 
