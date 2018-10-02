@@ -69,6 +69,43 @@ FROM tblEmployee
 INNER JOIN tblDEPARTMENT
 ON tblEmployee.departmentid = tblDepartment.id
 
+SELECT name, gender, salary, departmentname
+FROM tblEmployee
+LEFT JOIN tblDEPARTMENT
+ON tblEmployee.departmentid = tblDepartment.id
+
+
+SELECT name, gender, salary, departmentname
+FROM tblEmployee
+RIGHT JOIN tblDEPARTMENT
+ON tblEmployee.departmentid = tblDepartment.id
+
+
+SELECT name, gender, salary, departmentname
+FROM tblEmployee
+FULL JOIN tblDEPARTMENT
+ON tblEmployee.departmentid = tblDepartment.id
+
+SELECT        coloumnlist
+FROM          LeftTable
+JOINTYPE      RightTable
+ON            JoinCondition
+
+ ######################################ADVANCED JOINS##############################################
+IN THE ABOVE JOINS WE ALWAYS HAVE COMMON PART + ADDTIONAL PART - NOW WHAT IF WE ONLY HAVE TO SEE DIFFERENCE 
+
+SELECT name, gender, salary, departmentname
+FROM tblEmployee
+LEFT JOIN tblDEPARTMENT
+ON tblEmployee.departmentid = tblDepartment.id
+WHERE tblEmployee.departmentid IS NULL     ////// or -> WHERE tblDepartment.id IS NULL  
+
+Simarlarly the other queries can be written in same way
+ ######################################SELF JOINS##############################################
+
+
+
+
 
 
 
