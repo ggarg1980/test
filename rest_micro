@@ -1,6 +1,8 @@
-Spring boot Application -> There are lot of defaults set in the project. In the Spring debug logs you have AUTO CONFIGURATION REPORT 
-which states are the defaults which are configured as part of the project. So dispatcher servlet and error configuration are automatically
-set. There is something called 'Jackson' beans doing conversion from JSON to objects and similar stuff.
+Spring boot Application -> There are lot of defaults set in the project. 
+In the Spring debug logs you have AUTO CONFIGURATION REPORT 
+which states are the defaults which are configured as part of the project.
+So dispatcher servlet and error configuration are automatically set. 
+There is something called 'Jackson' beans doing conversion from JSON to objects and similar stuff.
 
 HTTP:- GET / POST / DELETE
 200 - SUCCESS, 201 - CREATED SUCCESFULLY
@@ -22,7 +24,9 @@ ELSE
 
 
 spring-cloud-starter-netflix-zuul ---> API Gateway
-spring-cloud-starter-netflix-eureka-client  <----> spring-cloud-starter-netflix-eureka-server -> Naming server --> Service Registration and Discovery
+spring-cloud-starter-netflix-eureka-client  <----> spring-cloud-starter-netflix-eureka-server
+-> Naming server --> Service Registration and Discovery
+
 spring-cloud-starter-openfeign --> Easy implmenation of Rest Clients
 spring-cloud-starter-netflix-ribbon -> Load balances 
 spring-cloud-starter-netflix-hysterix -> Fault tolerance 
@@ -30,7 +34,8 @@ spring-cloud-starter-netflix-hysterix -> Fault tolerance
 spring-cloud-starter-sleuth --> Unique Ids across request
 spring-cloud-sleuth-zipkin  --> Distributed tracing services with Zipkin
 spring-cloud-starter-bus-amqp --> Queue service
-spring-cloud-starter-config <---->spring-cloud-config-server --> Configuration management service wrt to differnt envs usings Git
+spring-cloud-starter-config <---->spring-cloud-config-server --> Configuration management service wrt 
+to differnt envs usings Git
 
 spring-boot-starter-test
 spring-boot-starter-web
@@ -39,8 +44,6 @@ spring-boot-starter-actuator
 spring-data-rest-hal-browser
 spring-boot-starter-data-jpa
 spring-boot-devtools
-
-
 
 @SpringBootApplication   <---------------------------------------------- Required to define its spring boot application 
 public class CurrencyExchangeServiceApplication {
@@ -101,8 +104,8 @@ You create a resouce and then put and links inside it.
 
 ================================= Content Neogiation ===============================================
 
-Content Neogiation -> In the header you specify the format that you want the response in for example application/JSON or application/xml
-in that scenerio you need modify the response from server. Jackson dataformat xml 
+Content Neogiation -> In the header you specify the format that you want the response in for example application/JSON 
+or application/xml in that scenerio you need modify the response from server. Jackson dataformat xml 
 
 ================================= SWAGGER ===============================================
 Maven Dependencies -> Sringfox-swagger2 and Sringfox-swagger-ui
@@ -181,7 +184,8 @@ Level - 2 -> LEVEL 1 + Proper use of HTTP Methods
 Level - 3 -> LEVEL 2 + HATEOAS (What are next possible sections)
 
 ================================Micro-services================================
-Small Autonomous services which are created to resolve the business domain problem (often have HTTP as the underlying protocol).
+Small Autonomous services which are created to resolve the business domain problem
+(often have HTTP as the underlying protocol).
 -REST
 -Small well chosen Deployable Units
 -Cloud Enabled
@@ -263,7 +267,8 @@ public CurrencyConversionBean convertCurrency(@PathVariable String from, @PathVa
 	{
 
 	@GetMapping("/currency-exchange/from/{from}/to/{to}")
-	public CurrencyConversionBean retrieveExchangeValues(@PathVariable("from") String from, @PathVariable("to") String to};
+	public CurrencyConversionBean retrieveExchangeValues(@PathVariable("from") String from, 
+									@PathVariable("to") String to};
 
 	}
 	========================================
