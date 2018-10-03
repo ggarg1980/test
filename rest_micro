@@ -23,13 +23,14 @@ ELSE
 @ResponseStatus(HttpStatus.NOT_FOUND)
 
 
-spring-cloud-starter-netflix-zuul ---> API Gateway
-spring-cloud-starter-netflix-eureka-client  <----> spring-cloud-starter-netflix-eureka-server
+spring-cloud-starter-netflix-zuul ---> API Gateway (@EnableZuulProxy)
+spring-cloud-starter-netflix-eureka-client  <----> (EnableDiscoveryClient)
+spring-cloud-starter-netflix-eureka-server <---> @EnableEurekaServer
 -> Naming server --> Service Registration and Discovery
 
-spring-cloud-starter-openfeign --> Easy implmenation of Rest Clients
-spring-cloud-starter-netflix-ribbon -> Load balances 
-spring-cloud-starter-netflix-hysterix -> Fault tolerance 
+spring-cloud-starter-openfeign --> Easy implmenation of Rest Clients (@EnableFeignClients
+spring-cloud-starter-netflix-ribbon -> Load balances (@EnableRibbonClient)
+spring-cloud-starter-netflix-hysterix -> Fault tolerance (@EnableHyterix)
 
 spring-cloud-starter-sleuth --> Unique Ids across request
 spring-cloud-sleuth-zipkin  --> Distributed tracing services with Zipkin
@@ -39,7 +40,6 @@ to differnt envs usings Git
 
 spring-boot-starter-test
 spring-boot-starter-web
-spring-boot-starter-actuator
 spring-boot-starter-actuator
 spring-data-rest-hal-browser
 spring-boot-starter-data-jpa
