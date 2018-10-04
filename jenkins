@@ -67,3 +67,41 @@ node
        }
    }
 }
+
+
+node
+{
+    stage('SCM CheckOut')
+    {
+        git credentialsId: 'git-hub-connection-details', url: 'https://github.com/gg1980/my-app'
+    }
+stage('MVN Package')
+    {
+        
+	    def mvnHome = tool name: 'maven-3.5.4', type: 'maven'
+        def mvnCMD ="${mvnHome}/bin/mvn"
+        sh "${mvnCMD} clean package" 
+    }
+    stage ('Build Docker Image')
+    {
+      sh 'docker build -t ggarg/my-app:2.0.0 .'
+    }
+   stage ('Push Docker Image')
+   {
+        withCredentials([string(credentialsId: 'dockerHubPasswordv1', variable: 'dockerHubPasswordv1')]) {
+            sh "docker login -u ggarg -p ${dockerHubPasswordv1}"
+        }       
+     sh 'docker push ggarg/my-app:2.0.0'
+   }    
+   stage('Run Container on Dev Server')
+   {
+       def dockerRm = 'sudo docker rm --force my-ggarg-app'
+       def dockerRun = 'sudo docker run --rm -p 8080:8080 -d --name my-ggarg-app ggarg/my-app:2.0.0 '
+       sshagent(['ec2-user-deployment'])
+       {
+         sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.27.176 ${dockerRm}"
+         sh "ssh -o StrictHostKeyChecking=no ec2-user@172.31.27.176 ${dockerRun}"
+       }
+   }
+   
+}
