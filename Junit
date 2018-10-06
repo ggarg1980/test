@@ -1,0 +1,49 @@
+Junit
+Parameter - String for error, expected value, actual value
+Arrays, Single Values, Objects, Null Values
+
+NTSE
+- assertsNotNull
+- assetsNull
+
+- assestsTrue
+- assestsFalse
+
+-assertsSame
+-assertsNotSame
+
+- assertsEquals
+- assertsArrayEquals
+
+@RunWith(Suite.class)
+@Suite.SuiteClasses({SuiteTest1.class, SuiteTest2.class})
+public class TestSuiteTest{
+    public TestSuiteTest()
+    {
+
+    }
+    @BeforeClass
+    public static void setUpClass()
+    {
+
+    }
+    @AfterClass
+    public static void tearDownClass()
+    {
+
+    }
+}
+
+Exception handling:-
+                @Test (expected = IndexOutOfBoundException.class)
+                public void testMain()
+                {
+                   new ArrayList<Object>().get(0);
+                }
+
+                @Test (expected = ArithmeticException.class)
+                public void testDivideByZero()
+                {
+                   int x = 10/0;
+                }
+
