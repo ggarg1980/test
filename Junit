@@ -46,4 +46,10 @@ Exception handling:-
                 {
                    int x = 10/0;
                 }
-
+======Ignoring a object=======
+            @Ignore ("This is main method and i don't want to test it now")
+            @Test
+            public void testMain()
+            {
+                assertFalse(true);
+            }
