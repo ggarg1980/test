@@ -1,0 +1,205 @@
+https://www.linkedin.com/learning/spring-framework-in-depth/introduction-to-the-applicationcontext
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>Brussels-SR3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId> #############################
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId> #############################
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId> #############################
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId> #############################
+        </dependency>
+    </dependencies>
+
+
+@Configuration #############################
+public class HelloConfig {
+    @Bean #############################
+    public String greeting(){
+        return "World";
+    }
+
+    public static void main(String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(HelloConfig.class); #############################
+        String text = (String)context.getBean("greeting"); #############################
+        System.out.println("Hello " + text);
+    }
+}
+
+Final point to note is that we can actually have more than one ApplicationContext running at a given time. 
+In fact, in a web world, we always have more than one. Now, the parent context you seldom will interact with,
+but it has a handle to the context that you do interact with. 
+And as with all good software, you can always interact with your children, but they cannot interact with you.
+
+@Configuration #############################
+public class AppConfig {
+
+    @Bean #############################
+    public OrderService orderService(InventoryService inventoryService, CustomerRepository customerRepository, SalesOrderRepository salesOrderRepository){
+        return new OrderServiceImpl(inventoryService, customerRepository, salesOrderRepository);
+    }
+    @Bean #############################
+    public InventoryService inventoryService(InventoryItemRepository inventoryItemRepository){
+        return new InventoryServiceImpl(inventoryItemRepository);
+    }
+    @Bean #############################
+    public InventoryItemRepository inventoryItemRepository(){
+        return new InventoryItemRepository();
+    }
+    @Bean #############################
+    public CustomerRepository customerRepository(){
+        return new CustomerRepository();
+    }
+    @Bean #############################
+    public SalesOrderRepository salesOrderRepository(){
+        return new SalesOrderRepository();
+    }
+    public static void main (String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        OrderService orderService = context.getBean(OrderService.class);
+        System.out.println(orderService==null?"NULL":"A OK");
+    }
+}
+
+###############################################################################################################
+
+@Configuration #############################
+@Import(DataConfig.class) #############################
+@PropertySource("classpath:/application.properties") #############################
+public class AppConfig {
+
+    @Value("${greeting.text}") #############################
+    private String greetingText;
+
+    public class Worker{
+        private String text;
+
+        public Worker(String text){
+            this.text = text;
+        }
+
+        public void execute(){
+            System.out.println("Hello " + text);
+        }
+
+    }
+
+    @Bean #############################
+    public Worker worker(){
+        return new Worker(greetingText);
+    }
+
+    @Autowired #############################
+    private CustomerRepository customerRepository;
+
+    @Autowired #############################
+    private InventoryItemRepository inventoryItemRepository;
+
+    @Autowired #############################
+    private SalesOrderRepository salesOrderRepository;
+
+    @Bean
+    public OrderService orderService(InventoryService inventoryService, CustomerRepository customerRepository, SalesOrderRepository salesOrderRepository){
+        return new OrderServiceImpl(inventoryService, customerRepository, salesOrderRepository);
+    }
+
+    @Bean
+    public InventoryService inventoryService(InventoryItemRepository inventoryItemRepository){
+        return new InventoryServiceImpl(inventoryItemRepository);
+    }
+
+
+    public static void main (String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class); #############################
+        OrderService orderService = context.getBean(OrderService.class); #############################
+        System.out.println(orderService==null?"NULL":"A OK");
+        Worker worker = context.getBean(Worker.class); #############################
+        worker.execute();
+    }
+}
+###############################################################################################################
+we have ===> application-dev.properties and application-prod.properties
+
+@Configuration
+@Import(DataConfig.class)
+@PropertySource("classpath:/application-${spring.profiles.active}.properties") ####################
+public class AppConfig {
+    @Value("${greeting.text}")
+    private String greetingText;
+    @Value("${greeting.preamble}")
+    private String greetingPreamble;
+    @Value("#{new Boolean(environment['spring.profiles.active']=='dev')}")
+    private boolean isDev;
+
+    public class Worker{
+        private String preamble;
+        private String text;
+        public Worker(String preamble, String text){
+            this.preamble = preamble;
+            this.text = text;
+        }
+        public void execute(){
+            System.out.println(preamble + " " + text + "is dev: " + isDev);
+        }
+    }
+    @Bean
+    public Worker worker(){
+        return new Worker(greetingPreamble, greetingText);
+    }
+
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    @Autowired
+    private InventoryItemRepository inventoryItemRepository;
+
+    @Autowired
+    private SalesOrderRepository salesOrderRepository;
+
+    @Bean
+    public OrderService orderService(InventoryService inventoryService, CustomerRepository customerRepository, SalesOrderRepository salesOrderRepository){
+        return new OrderServiceImpl(inventoryService, customerRepository, salesOrderRepository);
+    }
+
+    @Bean
+    public InventoryService inventoryService(InventoryItemRepository inventoryItemRepository){
+        return new InventoryServiceImpl(inventoryItemRepository);
+    }
+
+
+    public static void main (String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        OrderService orderService = context.getBean(OrderService.class);
+        System.out.println(orderService==null?"NULL":"A OK");
+        Worker worker = context.getBean(Worker.class);
+        worker.execute();
+    }
+}
+######################################################################################################################################
+
+The default scope is Singleton 
+
+
+
+
