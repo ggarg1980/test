@@ -1,5 +1,22 @@
 https://www.linkedin.com/learning/spring-framework-in-depth/introduction-to-the-applicationcontext
 
+@Configuration
+@Import(DataConfig.class) <- Import other bean configurations
+@Autowired
+@Bean
+@Scope("singleton") Or @Scope("prototype")
+@Value("${greetings.text"}")
+@PropertySource("classpath:/application.properties")
+${spring.profiles.active}
+@Component - This indicates that a class should be loaded into the bean factory 
+@Autowiring
+Dependency injection with component scanning is achieved through auto-wiring.
+@ComponentScan(basepackages = {"com.lyanda.common"})
+@PostConstruct -> This is executed after the objects are loaded
+@PreDestroy -> This is called just before distroying everything
+
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -197,9 +214,162 @@ public class AppConfig {
     }
 }
 ######################################################################################################################################
+Bean Scope
+1. Singleton -> The default scope is Singleton 
+2. Prototype -> New instance is created everytime.
+3. Session -> Web Only
+4. Request -> Web Only
 
-The default scope is Singleton 
+The ApplicationContext includes all the functionality of the BeanFactory. It is generally recommended to use the former. 
+There are some limited situations, such as in mobile applications, where memory consumption might be critical.
+In those scenarios, it would be justifiable to use the more lightweight BeanFactory. 
+However, in most enterprise applications, the ApplicationContext is what you will want to use.
+
+BeanFactory is also called basic IOC and ApplicationContext is called Advanced IOC. Although BeanFactory 
+and ApplicationContext both are used to get the beans from IOC container by using method getBean(String beanName).
+But they have some significant differences in their implementation which are described as below :
+
+ 1. BeanFactory uses lazy initialization approach whereas ApplicationContext uses eager initialization approach.
+
+i.e BeanFactory creates a singleton bean only when it is requested from it but ApplicationContext creates all 
+singleton beans at the time of its own initialization.
+
+3. ApplicationContext supports internationalization but BeanFactory do not.
+
+@Component
+Indicating beans that need to be managed by the bean factory is as simple as an annotation on the class of @component 
+or one of its stereotypes. Typical stereotypes include @controller, @service and @repository.
+Some of these sterotypes add additional behavior to your bean through the proxies that come along with them, such as the @repository.
+
+@Autowiring
+Dependency injection with component scanning is achieved through auto-wiring.
+
+@ComponentScan(basepackages = {"com.lyanda.common"})
+
+@PostConstruct -> This is executed after the objects are loaded
+@PreDestroy -> This is called just before distroying everything
+
+
+================================================================================================================
+Join point:- A join point is a point in code in the program where execution of an Aspect is targeted towards.
+So this is your method, or your line of code or your annotation that the Aspect is going to target. 
+
+Pointcut:- The pointcut is the expression that identifies that join point through some sort of regular expression matching. 
+
+Advice:- The advice is the code that you actually execute at a join point that was selected by a pointcut. 
+So the advice is your cross-cutting concern routine that we are applying to a join point in our application.
+
+Aspect:- An Aspect is a module that contains all of your pointcuts, as well as all of your advice that is then injected at 
+the run time of your application. So let's get started with writing our pointcuts.
+
+================================================================================================================
+Step 1. Define Annotation which needs to be applied
+Step 2: Create Aspect Class and add pointcut and advise
+Step 3: Apply the pointcut on the method 
+
+Step 1:
+====
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Loggable {  <<<<<#################
+}
+====
+Step 2: Create Aspect Class and add pointcut and advise
+
+@Component
+@Aspect <<<<<################# ASPECT
+public class LoggingAspect {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingAspect.class);
+
+    @Pointcut("@annotation(Loggable)")  <<<<<################# POINT-CUT
+    public void executeLogging(){
+
+    }
+
+    @Before("executeLogging()")  <<<<<################# ADVISE
+    public void logMethodCall(JoinPoint joinPoint){
+        StringBuilder message = new StringBuilder("Method: ");
+        message.append(joinPoint.getSignature().getName());
+        Object[] args = joinPoint.getArgs();
+        if(null!=args && args.length>0){
+            message.append(" args=[");
+            Arrays.asList(args).forEach(arg->{
+                message.append("arg=").append(arg).append("|");
+            });
+        }
+        LOGGER.info(message.toString());
+    }
+    
+    
+        @AfterReturning(pointcut = "executeLogging()", returning = "returnValue")
+        public void logMethodCall(JoinPoint joinPoint, Object returnValue){
+        StringBuilder message = new StringBuilder("Method: ");
+        message.append(joinPoint.getSignature().getName());
+        Object[] args = joinPoint.getArgs();
+        if(null!=args && args.length>0){
+            message.append(" args=[");
+            Arrays.asList(args).forEach(arg->{
+                message.append("arg=").append(arg).append("|");
+            });
+        }
+        if(returnValue instanceof Collection){
+            message.append(" | returning ").append(((Collection)returnValue).size()).append(" instance(s)");
+        }else{
+            message.append(" | returning ").append(returnValue.toString());
+        }
+        LOGGER.info(message.toString());
+    }
+    
+        @Around("executeLogging()")
+        public Object logMethodCall(ProceedingJoinPoint joinPoint <<<######) throws Throwable{
+        long startTime = System.currentTimeMillis();
+        Object returnValue = joinPoint.proceed(); <<<######
+        long totalTime = System.currentTimeMillis() - startTime;
+        StringBuilder message = new StringBuilder("Method: ");
+        message.append(joinPoint.getSignature().getName());
+        message.append(" totalTime: ").append(totalTime).append("ms ");
+        Object[] args = joinPoint.getArgs();
+        if(null!=args && args.length>0){
+            message.append(" args=[");
+            Arrays.asList(args).forEach(arg->{
+                message.append("arg=").append(arg).append("|");
+            });
+        }
+        if(returnValue instanceof Collection){
+            message.append(" | returning ").append(((Collection)returnValue).size()).append(" instance(s)");
+        }else{
+            message.append(" | returning ").append(returnValue.toString());
+        }
+        LOGGER.info(message.toString());
+        return returnValue;
+    }
+
+
+    
+}
+
+Step 3: Apply the pointcut on the method
+...... Some Class.....
+@Loggable
+public Customer findOne(String id)
+{
+   return this.customerRepository.findOne(id);
+}
+..........................
 
 
 
+@Component
+@Aspect
+@ConditionalOnExpression("${authentication.service.enabled:true}")//enabled by default <<<<<<################ Conditional On/Off of an expect
+public class AuthenticationServiceAspect {
+    @Before("execution(* com.service.impl.AuthenticationServiceImpl.*(..))")
+    public void adviceMethod(JoinPoint joinPoint) {
+        if(true){
+            throw new Exception();
+        }
+    }
+}
+To disabling the aspect, just add authentication.service.enabled=false to your application.properties.
 
