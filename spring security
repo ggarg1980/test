@@ -1,0 +1,161 @@
+The default dependency is 
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+      </dependency>
+            
+Step 1:- Extend -> WebSecurityConfigurerAdapter
+Step 2:- Annotate with -> @Configuration & @EnableWebSecurity
+Step 3:- Overwrite protected void configure(HttpSecurity http) throws Exception {
+===========================================================================================================
+@Configuration     <---######------
+@EnableWebSecurity <---######------
+public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter{ <---######------
+    @Override <---######------
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "/index", "/css/*", "/js/*").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic(); <---######------ On the pages it will pop-up message
+    }
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+        List<UserDetails> users = new ArrayList<>();
+        users.add(User.withDefaultPasswordEncoder().username("fpmoles").password("password").roles("USER", "ADMIN").build());
+        users.add(User.withDefaultPasswordEncoder().username("jdoe").password("foobar").roles("USER").build());
+        return new InMemoryUserDetailsManager(users); <---######------ In memory data 
+    }
+}
+===========================================================================================================
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <scope>runtime</scope>
+      </dependency>
+
+1. Create a User Entity
+
+@Entity
+@Table(name="USER")
+public class User {
+    @Id
+    @Column(name="USER_ID")
+    private long id;
+    @Column(name="USERNAME", nullable = false, unique = true)
+    private String username;
+    @Column(name="PASSWORD")
+    private String password;
+    //getter//setters
+}
+
+2. Create a UserRepository
+public interface UserRepository extends JpaRepository<User, Long>{
+    User findByUsername(String username);
+}
+
+3. Spring depends upon principles NOT on users (<---######------). Implement UserDetails Class from Spring Security
+
+public class LandonUserPrincipal implements UserDetails <---######------ User Details are from spring Security{
+    private User user;
+    public LandonUserPrincipal(User user){
+        super();
+        this.user = user;
+    }
+    @Override <---######------ Method are from spring Security
+    public Collection<? extends GrantedAuthority> getAuthorities() 
+    {
+        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    }
+    @Override <---######------ Method are from spring Security
+    public String getPassword() {
+        return this.user.getPassword();
+    }
+    @Override <---######------ Method are from spring Security
+    public String getUsername() {
+        return this.user.getUsername();
+    }
+    @Override <---######------ Method are from spring Security
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override <---######------ Method are from spring Security
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override <---######------ Method are from spring Security
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override <---######------ Method are from spring Security
+    public boolean isEnabled() {
+        return true;
+    }
+}
+
+Step 4: Implement UserDetailsService
+@Service
+public class LandonUserDetailsService  implements UserDetailsService{
+
+    private final UserRepository userRepository;
+
+    public LandonUserDetailsService(UserRepository userRepository){
+        super();
+        this.userRepository = userRepository;
+    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = this.userRepository.findByUsername(username);
+        if(null==user){
+            throw new UsernameNotFoundException("cannot find username: " + username);
+        }
+        return new LandonUserPrincipal(user);
+    }
+}
+
+Step 5: Rewrite class for AppSecurityConfiguration 
+@Configuration
+@EnableWebSecurity
+public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter{
+    @Autowired
+    private LandonUserDetailsService userDetailsService;
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        return provider;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "/index", "/css/*", "/js/*").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .httpBasic();
+    }
+
+}
+
+
+
