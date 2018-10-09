@@ -135,7 +135,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        //provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(11)); <---######------ Encryption
         return provider;
     }
 
@@ -157,5 +158,27 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
 }
 
+Use bcrypt for passwords -> These are easy to use and are in build in Spring
 
+We have set-up authentication and now set-up autorization
 
+1. Create Table and Object and JPARepository 
+
+Class -1 
+@Entity
+@Table(name="AUTH_USER_GROUP")
+public class AuthGroup {
+    @Id
+    @Column(name="AUTH_USER_GROUP_ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @Column(name="USERNAME")
+    private String username;
+    @Column(name="AUTH_GROUP")
+    private String authGroup;
+}
+
+Class -2 
+public interface AuthGroupRepository extends JpaRepository<AuthGroup, Long> {
+    List<AuthGroup> findByUsername(String username);
+}
