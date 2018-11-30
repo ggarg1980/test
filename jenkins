@@ -1,3 +1,25 @@
+==> Creation of 'docker container' inside a 'Jenkins docker container' 
+https://getintodevops.com/blog/the-simple-way-to-run-docker-in-docker-for-ci
+
+===================================Dockerfile========================
+FROM jenkins/jenkins:lts
+USER root
+RUN apt-get update -qq \
+    && apt-get install -qqy apt-transport-https ca-certificates curl gnupg2 software-properties-common 
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+RUN add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+RUN apt-get update  -qq \
+    && apt-get -y install docker-ce -y
+RUN usermod -aG docker jenkins
+===================================Dockerfile====End====================
+Build --> docker build -t jenkins_docker:v1 .
+
+$Env:COMPOSE_CONVERT_WINDOWS_PATHS=1 (*Note: This is important)
+
+
 https://www.youtube.com/watch?v=gdbA3vR2eDs
 https://github.com/CJRivas/jenkinspipeline/blob/master/Jenkinsfile
 https://github.com/jleetutorial/maven-project
