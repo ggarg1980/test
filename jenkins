@@ -168,5 +168,56 @@ pipeline {
     }
 }
 //////////////////Implementing Choice changes END///////////////
+pipeline 
+{
+	agent any
+	 environment
+	 {
+            javaHome =	tool name: 'JAVA_8', type: 'jdk'
+	        mvnHome =  tool name: 'mvn_3.6.0', type: 'maven'
+	        mvnCMD = "${mvnHome}/bin/mvn"
+	        JAVA_HOME = "${javaHome}"
+			BRANCH = 'develop'
+			DEPDIR ='/home/DEV/DEVELOP'
+    }
+	parameters
+	{
+		choice(name: 'ENVBRANCH', choices: ['DEV','MASTER'], description: 'Please select master/development branch')
+	}
+	stages 
+	{
+        stage ('Evaluate')
+		{
+            steps {
+                script
+				{
+                    if (params.ENVBRANCH=='MASTER') 
+					{
+						BRANCH = 'master'
+						DEPDIR = '/home/DEV/RELEASE'
+                    }
+                }
+				echo "Executing ${BRANCH}"
+				echo "CopyDir ${DEPDIR}"
+            }
+        }
+		stage('SCM Checkout')
+		{
+		    steps 
+		    {
+			    git credentialsId: 'jenkins-master', url: 'git@bitbucket.org:mywebsite/fc-website', branch: "${BRANCH}"
+		    }
+		}
+		stage('mvn clean package')
+		{
+			steps
+			{
+			    sh label: 'Executing Clean Package', script: "${mvnCMD} clean install -Pci"
+			}
+		}
+		
+	}
+}
+
 
 
