@@ -116,3 +116,57 @@ stage('MVN Package')
    }
    
 }
+
+
+//////////////////Implementing Choice changes start///////////////
+pipeline {
+    agent any
+    parameters
+	{
+    
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+	}
+	environment
+	{
+		test='default'
+	}
+	stages {
+        stage('Example')
+        {
+            steps {
+                echo "Print: ${test}"
+                echo "Choice: ${params.CHOICE}"
+                }
+        }
+        stage ('Main Stage')
+		{
+            steps {
+                script {
+                    if (params.CHOICE=='One') 
+					{
+						test=' one modified'
+                        stage ('Stage 1') {
+                            sh "echo Stage 1 ${test}"
+                        }
+                    }
+                    if (params.CHOICE=='Two') {
+						test=' two modified'	
+                        stage ('Stage 2') {
+                            sh "echo Stage 2 ${test}"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Final')
+        {
+            steps {
+                sh " echo ${test}"
+                }
+        }
+       
+    }
+}
+//////////////////Implementing Choice changes END///////////////
+
+
