@@ -1,0 +1,74 @@
+==========================MICROSERVICES===================
+https://dzone.com/articles/top-29-microservices-interview-questions-for-2019
+What Is Spring Cloud?		
+What Is Spring Boot?
+Role of Actuator in Spring Boot
+How Is Spring Security Implemented In a Spring Boot Application
+Which Embedded Containers Are Supported by Spring Boot
+How Can You Set Up Service Discovery
+Why Would You Opt for Microservices Architecture
+Why Do People Hesitate to Use Microservices?
+Define Domain Driven Design
+What Is OAuth?
+What Are Some Major Roadblocks for Microservices Testing?
+Common Mistakes Made While Transitioning to Microservices
+What Are the Fundamentals of Microservices Design?
+What Do You Mean by Bounded Context?
+What Is a Client Certificate?
+How to Configure Spring Boot Application Logging?
+What Is Idempotence and How Is it Used?
+Put Vs Post
+https://www.edureka.co/blog/interview-questions/microservices-interview-questions/
+How does Microservice Architecture work?
+What are the pros and cons of Microservice Architecture?
+What is the difference between Monolithic, SOA and Microservices Architecture?
+What are the challenges you face while working Microservice Architectures?
+What are the key differences between SOA and Microservices Architecture?
+Can you give a gist about Rest and Microservices?
+What is Two Factor Authentication?
+What is the use of PACT in Microservices architecture?
+What is End to End Microservices Testing?
+What is the difference between Mock or Stub?
+What is the purpose of Docker
+https://career.guru99.com/microservices-interview-questions-and-answer/
+What is a CDC?
+What are Reactive Extensions in Microservices?
+========================================================================
+Basic code for following questions
+What is Microservice Registration and Discovery ?
+What is Eureka?
+What is Ribbon?
+What is Hytrix ?
+What is Feign?
+What is Zuul?
+What is Rabbit MQ?
+What is Apache Camel?
+What is Swagger and how its implmeneted?
+https://www.javainuse.com/spring/SpringBootInterviewQuestions
+What is JavaConfig?
+How to reload my changes on Spring Boot without having to restart server?
+How to disable Actuator endpoint security in Spring Boot
+How to run Spring boot application to custom port 
+What is ELK stack?How to use it with Spring Boot
+What is YAML (READ SOMETHING AROUND THIS)
+Have you integrated Spring Boot and ActiveMQ
+Have you integrated Spring Boot and Apache Kafka 
+How to implement Pagination and Sorting with Spring Boot
+What is Spring Profiles ? How do you implement it using Spring Boot (IMPORTANT)
+What is caching? Have you used any caching framework with Spring Boot
+What is CSRF attack? How to enable CSRF protection against it? (IMP)
+What is Apache Kafka? How to integrate it with Spring Boot?
+How can we monitor all the Spring Boot Microservices?
+
+https://github.com/in28minutes/spring-microservices/tree/master/03.microservices
+Establishing Communication between Microservices
+Centralized Microservice Configuration with Spring Cloud Config Server
+Using Spring Cloud Bus to exchange messages about Configuration updates
+Simplify communication with other Microservices using Feign REST Client
+Implement client side load balancing with Ribbon
+Implement dynamic scaling using Eureka Naming Server and Ribbon
+Implement API Gateway with Zuul
+Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
+Implement Fault Tolerance with Zipkin
+
+
