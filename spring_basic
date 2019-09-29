@@ -1,3 +1,81 @@
+=====================================================================================================
+https://www.youtube.com/watch?v=yNY8HLk1hNM (Questions and answers)
+https://howtodoinjava.com/spring-core/spring-configuration-annotation/ (Nice Article)
+=====================================================================================================
+
+Step 1:-
+===============================================================================================
+Basic dependencies
+    Spring-core
+    Spring-bean
+    Spring-context
+All these coming from org.springframework
+
+@Configuration -> @Configuration annotation indicates that a class declares one or more @Bean methods and may be 
+processed by the Spring container to generate bean definitions and service requests for those beans at runtime.
+
+@Configuration
+public class AppConfig {
+ 
+    @Bean(name="demoService")
+    public DemoClass service()
+    {
+        
+    }
+
+Step 2:- Example 1
+===============================================================================================
+@Configuration #############################
+public class AppConfig {
+
+    @Bean #############################
+    public OrderService orderService(InventoryService inventoryService, CustomerRepository customerRepository, SalesOrderRepository salesOrderRepository){
+        return new OrderServiceImpl(inventoryService, customerRepository, salesOrderRepository);
+    }
+    @Bean #############################
+    public InventoryService inventoryService(InventoryItemRepository inventoryItemRepository){
+        return new InventoryServiceImpl(inventoryItemRepository);
+    }
+    @Bean #############################
+    public InventoryItemRepository inventoryItemRepository(){
+        return new InventoryItemRepository();
+    }
+    @Bean #############################
+    public CustomerRepository customerRepository(){
+        return new CustomerRepository();
+    }
+    @Bean #############################
+    public SalesOrderRepository salesOrderRepository(){
+        return new SalesOrderRepository();
+    }
+    public static void main (String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        ##################################---> Create application context from AnnotationConfigApplicationContext
+        ##################################---> Pass the name of the config class
+        
+        OrderService orderService = context.getBean(OrderService.class);  ###---> getBean by passing the class name
+        System.out.println(orderService==null?"NULL":"A OK");
+    }
+}
+===================================================================================================================
+Example 2:-
+
+@Configuration #############################
+public class HelloConfig {
+    @Bean #############################
+    public String greeting(){
+        return "World";
+    }
+
+    public static void main(String[] args){
+        ApplicationContext context = new AnnotationConfigApplicationContext(HelloConfig.class); #############################
+        String text = (String)context.getBean("greeting"); ############################# by passing method name
+        System.out.println("Hello " + text);
+    }
+}
+=================================================================================================
+
+
 https://www.linkedin.com/learning/spring-framework-in-depth/introduction-to-the-applicationcontext
 
 @Configuration
@@ -49,19 +127,6 @@ Dependency injection with component scanning is achieved through auto-wiring.
     </dependencies>
 
 
-@Configuration #############################
-public class HelloConfig {
-    @Bean #############################
-    public String greeting(){
-        return "World";
-    }
-
-    public static void main(String[] args){
-        ApplicationContext context = new AnnotationConfigApplicationContext(HelloConfig.class); #############################
-        String text = (String)context.getBean("greeting"); #############################
-        System.out.println("Hello " + text);
-    }
-}
 
 Final point to note is that we can actually have more than one ApplicationContext running at a given time. 
 In fact, in a web world, we always have more than one. Now, the parent context you seldom will interact with,
